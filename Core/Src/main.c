@@ -67,100 +67,104 @@ extern void initialise_monitor_handles(void);
 /* USER CODE END 0 */
 
 /**
- * @brief  The application entry point.
- * @retval int
- */
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
-    /* USER CODE BEGIN 1 */
+  /* USER CODE BEGIN 1 */
 
-    /* USER CODE END 1 */
+  /* USER CODE END 1 */
 
-    /* MCU Configuration--------------------------------------------------------*/
+  /* MCU Configuration--------------------------------------------------------*/
 
-    /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 
-    NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-    
-    /* System interrupt init*/
+  NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
-    /* USER CODE BEGIN Init */
+  /* System interrupt init*/
 
-    /* USER CODE END Init */
+  /* USER CODE BEGIN Init */
 
-    /* Configure the system clock */
-    SystemClock_Config();
-    
-    /* USER CODE BEGIN SysInit */
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+
+  /* USER CODE BEGIN SysInit */
     LL_SYSTICK_EnableIT();
 #if defined(USING_SEMIHOSTING)
     initialise_monitor_handles();
 #endif
-    /* USER CODE END SysInit */
+  /* USER CODE END SysInit */
 
-    /* Initialize all configured peripherals */
-    MX_GPIO_Init();
-    MX_TIM2_Init();
-    MX_RTC_Init();
-    /* USER CODE BEGIN 2 */
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_TIM2_Init();
+  MX_RTC_Init();
+  /* USER CODE BEGIN 2 */
     ds18b20_init(ds18b20_init_cfg);
-    /* USER CODE END 2 */
+  /* USER CODE END 2 */
 
-    /* Infinite loop */
-    /* USER CODE BEGIN WHILE */
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
     while (1) {
         ds18b20_loop();
-        /* USER CODE END WHILE */
+    /* USER CODE END WHILE */
 
-        /* USER CODE BEGIN 3 */
+    /* USER CODE BEGIN 3 */
     }
-    /* USER CODE END 3 */
+  /* USER CODE END 3 */
 }
 
 /**
- * @brief System Clock Configuration
- * @retval None
- */
+  * @brief System Clock Configuration
+  * @retval None
+  */
 void SystemClock_Config(void)
 {
-    LL_FLASH_SetLatency(LL_FLASH_LATENCY_2);
-    while (LL_FLASH_GetLatency() != LL_FLASH_LATENCY_2) {
-    }
-    
-    LL_PWR_SetRegulVoltageScaling(LL_PWR_REGU_VOLTAGE_SCALE2);
-    LL_RCC_MSI_Enable();
-    
-    /* Wait till MSI is ready */
-    while (LL_RCC_MSI_IsReady() != 1) {
-    }
-    
-    LL_RCC_MSI_EnableRangeSelection();
-    LL_RCC_MSI_SetRange(LL_RCC_MSIRANGE_8);
-    LL_RCC_MSI_SetCalibTrimming(0);
-    LL_PWR_EnableBkUpAccess();
-    LL_RCC_LSE_SetDriveCapability(LL_RCC_LSEDRIVE_LOW);
-    LL_RCC_LSE_Enable();
-    
-    /* Wait till LSE is ready */
-    while (LL_RCC_LSE_IsReady() != 1) {
-    }
-    
-    LL_RCC_MSI_EnablePLLMode();
-    LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_MSI);
-    
-    /* Wait till System clock is ready */
-    while (LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_MSI) {
-    }
-    
-    LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
-    LL_RCC_SetAHB3Prescaler(LL_RCC_SYSCLK_DIV_1);
-    LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
-    LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
-    
-    LL_Init1msTick(16000000);
-    
-    /* Update CMSIS variable (which can be updated also through SystemCoreClockUpdate function) */
-    LL_SetSystemCoreClock(16000000);
+  LL_FLASH_SetLatency(LL_FLASH_LATENCY_2);
+  while(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_2)
+  {
+  }
+
+  LL_PWR_SetRegulVoltageScaling(LL_PWR_REGU_VOLTAGE_SCALE2);
+  LL_RCC_MSI_Enable();
+
+   /* Wait till MSI is ready */
+  while(LL_RCC_MSI_IsReady() != 1)
+  {
+  }
+
+  LL_RCC_MSI_EnableRangeSelection();
+  LL_RCC_MSI_SetRange(LL_RCC_MSIRANGE_8);
+  LL_RCC_MSI_SetCalibTrimming(0);
+  LL_PWR_EnableBkUpAccess();
+  LL_RCC_LSE_SetDriveCapability(LL_RCC_LSEDRIVE_LOW);
+  LL_RCC_LSE_Enable();
+
+   /* Wait till LSE is ready */
+  while(LL_RCC_LSE_IsReady() != 1)
+  {
+  }
+
+  LL_RCC_MSI_EnablePLLMode();
+  LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_MSI);
+
+   /* Wait till System clock is ready */
+  while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_MSI)
+  {
+  }
+
+  LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
+  LL_RCC_SetAHB3Prescaler(LL_RCC_SYSCLK_DIV_1);
+  LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
+  LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
+
+  LL_Init1msTick(16000000);
+
+  /* Update CMSIS variable (which can be updated also through SystemCoreClockUpdate function) */
+  LL_SetSystemCoreClock(16000000);
 }
 
 /* USER CODE BEGIN 4 */
@@ -168,17 +172,17 @@ void SystemClock_Config(void)
 /* USER CODE END 4 */
 
 /**
- * @brief  This function is executed in case of error occurrence.
- * @retval None
- */
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
 void Error_Handler(void)
 {
-    /* USER CODE BEGIN Error_Handler_Debug */
+  /* USER CODE BEGIN Error_Handler_Debug */
     /* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     while (1) {
     }
-    /* USER CODE END Error_Handler_Debug */
+  /* USER CODE END Error_Handler_Debug */
 }
 
 #ifdef  USE_FULL_ASSERT
